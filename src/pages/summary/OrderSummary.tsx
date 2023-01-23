@@ -1,17 +1,30 @@
 import { useState } from 'react'
-import { Button, Form } from 'react-bootstrap'
+import { Button, Form, OverlayTrigger, Popover } from 'react-bootstrap'
 
 function OrderSummary() {
    const [isChecked, setIsChecked] = useState<boolean>(false)
 
+   const popover = (
+      <Popover id='terms-and-conditions-popover'>
+         <Popover.Body>No ice cream will actually be delivered</Popover.Body>
+      </Popover>
+   )
+
    const checkboxLabel = (
       <span>
-         I agree to <span className='text-primary'>Terms and Conditions</span>
+         I agree to{' '}
+         <OverlayTrigger
+            trigger={['hover', 'focus']}
+            placement='right'
+            overlay={popover}
+         >
+            <span className='text-primary'>Terms and Conditions</span>
+         </OverlayTrigger>
       </span>
    )
 
    return (
-      <Form>
+      <Form className='p-4'>
          <Form.Group
             className='mb-3'
             controlId='formCheckbox'
