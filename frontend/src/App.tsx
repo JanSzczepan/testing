@@ -1,10 +1,12 @@
 import './App.css'
-import OrderSummary from './pages/summary/OrderSummary'
+import OrderEntry from './pages/entry/OrderEntry'
+// import OrderSummary from './pages/summary/OrderSummary'
 
 function App() {
    return (
       <div className='App'>
-         <OrderSummary />
+         {/* <OrderSummary /> */}
+         <OrderEntry />
       </div>
    )
 }
