@@ -7,8 +7,14 @@ test('displays image for each scoop option from the server', async () => {
    const scoopImages: HTMLImageElement[] = await screen.findAllByRole('img', {
       name: /scoop$/i,
    })
-   expect(scoopImages).toHaveLength(2)
+   expect(scoopImages).toHaveLength(4)
 
    const altTexts = scoopImages.map((image) => image.alt)
-   expect(altTexts).toEqual(['Chocolate scoop', 'Vanilla scoop'])
+
+   expect(altTexts).toEqual([
+      'Chocolate scoop',
+      'Vanilla scoop',
+      'Mint scoop',
+      'Caramel scoop',
+   ])
 })

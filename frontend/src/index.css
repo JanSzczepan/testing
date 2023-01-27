@@ -9,4 +9,6 @@
 body {
    /* background-color: teal !important; */
    /* color: ivory !important; */
+   max-width: 100vw;
+   overflow-x: hidden;
 }
