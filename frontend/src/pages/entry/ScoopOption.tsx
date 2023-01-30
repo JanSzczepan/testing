@@ -1,14 +1,14 @@
 import { Card, Col } from 'react-bootstrap'
 
-type ScoopOptionProps = {
+export type OptionProps = {
    name: string
    imagePath: string
 }
 
-function ScoopOption({ name, imagePath }: ScoopOptionProps) {
+function ScoopOption({ name, imagePath }: OptionProps) {
    return (
       <Col>
-         <Card>
+         <Card className='h-100'>
             <Card.Img
                variant='top'
                src={`http://localhost:3030/${imagePath}`}

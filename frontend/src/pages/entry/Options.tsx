@@ -56,7 +56,7 @@ function Options({ optionType }: OptionsProps) {
    }
 
    return (
-      <Stack>
+      <Stack className='p-4'>
          <h3>{capitalizeFirstLetter(optionType)}</h3>
          {!!options.length && (
             <Row
@@ -64,6 +64,7 @@ function Options({ optionType }: OptionsProps) {
                sm={2}
                md={3}
                lg={4}
+               className='g-4'
             >
                {options.map(({ name, imagePath }) => (
                   <OptionItem

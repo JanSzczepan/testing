@@ -4,6 +4,7 @@ function OrderEntry() {
    return (
       <section>
          <Options optionType={OptionType.Scoops} />
+         <Options optionType={OptionType.Toppings} />
       </section>
    )
 }
