@@ -1,6 +1,7 @@
-import axios, { AxiosError } from 'axios'
+import axios from 'axios'
 import { useEffect, useMemo, useState } from 'react'
 import { Row, Stack } from 'react-bootstrap'
+import AlertBanner from '../common/AlertBanner'
 import ScoopOption from './ScoopOption'
 import ToppingOption from './ToppingOption'
 
@@ -20,6 +21,7 @@ type OptionsProps = {
 
 function Options({ optionType }: OptionsProps) {
    const [options, setOptions] = useState<Option[]>([])
+   const [isError, setIsError] = useState<boolean>(false)
 
    useEffect(() => {
       const getData = async () => {
@@ -30,8 +32,7 @@ function Options({ optionType }: OptionsProps) {
 
             setOptions(response.data)
          } catch (error) {
-            const err = error as AxiosError
-            throw err
+            setIsError(true)
          }
       }
 
@@ -58,22 +59,26 @@ function Options({ optionType }: OptionsProps) {
    return (
       <Stack className='p-4'>
          <h3>{capitalizeFirstLetter(optionType)}</h3>
-         {!!options.length && (
-            <Row
-               xs={1}
-               sm={2}
-               md={3}
-               lg={4}
-               className='g-4'
-            >
-               {options.map(({ name, imagePath }) => (
-                  <OptionItem
-                     key={name}
-                     name={name}
-                     imagePath={imagePath}
-                  />
-               ))}
-            </Row>
+         {isError ? (
+            <AlertBanner />
+         ) : (
+            !!options.length && (
+               <Row
+                  xs={1}
+                  sm={2}
+                  md={3}
+                  lg={4}
+                  className='g-4'
+               >
+                  {options.map(({ name, imagePath }) => (
+                     <OptionItem
+                        key={name}
+                        name={name}
+                        imagePath={imagePath}
+                     />
+                  ))}
+               </Row>
+            )
          )}
       </Stack>
    )
