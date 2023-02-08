@@ -6,7 +6,7 @@ import {
    useMemo,
    useState,
 } from 'react'
-import { Totals, pricePerItem } from '../constants'
+import { Totals, pricePerItem, optionsArr } from '../constants'
 
 type OrderDetailsType = {
    scoops: Partial<{
@@ -19,9 +19,16 @@ type OrderDetailsType = {
 
 type OptionType = 'scoops' | 'toppings'
 
+type List = {
+   scoops: string[]
+   toppings: string[]
+}
+
 type OrderDetailsContextType = {
    orderDetails: OrderDetailsType
    totals: Totals
+   total: number
+   list: List
    updateOrderDetails: (
       itemName: string,
       newItemCount: number,
@@ -33,6 +40,11 @@ type OrderDetailsContextType = {
 const OrderDetailsContext = createContext<OrderDetailsContextType>({
    orderDetails: { scoops: {}, toppings: {} },
    totals: { scoops: 0, toppings: 0 },
+   total: 0,
+   list: {
+      scoops: [],
+      toppings: [],
+   },
    updateOrderDetails: () => {},
    resetOrderDetails: () => {},
 })
@@ -57,16 +69,29 @@ export function OrderDetailsContextProvider({ children }: ProvierProps) {
       toppings: {},
    })
 
-   function updateOrderDetails(
-      itemName: string,
-      newItemCount: number,
-      optionType: OptionType
-   ) {
-      setOrderDetails((prevState) => ({
-         ...prevState,
-         [optionType]: { ...prevState[optionType], [itemName]: newItemCount },
-      }))
-   }
+   const updateOrderDetails = useCallback(
+      (itemName: string, newItemCount: number, optionType: OptionType) => {
+         if (newItemCount) {
+            setOrderDetails((prevState) => ({
+               ...prevState,
+               [optionType]: {
+                  ...prevState[optionType],
+                  [itemName]: newItemCount,
+               },
+            }))
+         } else {
+            const { [itemName]: i, ...newState } = orderDetails[optionType]
+
+            setOrderDetails((prevState) => ({
+               ...prevState,
+               [optionType]: {
+                  ...newState,
+               },
+            }))
+         }
+      },
+      [orderDetails]
+   )
 
    function resetOrderDetails() {
       setOrderDetails({
@@ -99,14 +124,44 @@ export function OrderDetailsContextProvider({ children }: ProvierProps) {
       [calculateTotal]
    )
 
+   const total = useMemo(
+      () =>
+         Object.values(totals).reduce(
+            (totalValue, value) => totalValue + value,
+            0
+         ),
+      [totals]
+   )
+
+   const list: List = useMemo(() => {
+      const l: List = {
+         scoops: [],
+         toppings: [],
+      }
+
+      for (let i = 0; i < optionsArr.length; i += 1) {
+         Object.keys(orderDetails[optionsArr[i]]).forEach((key) => {
+            l[optionsArr[i]].push(
+               optionsArr[i] === 'toppings'
+                  ? key
+                  : `${orderDetails[optionsArr[i]][key]} ${key}`
+            )
+         })
+      }
+
+      return l
+   }, [orderDetails])
+
    const value = useMemo(
       () => ({
          orderDetails,
          totals,
+         total,
+         list,
          updateOrderDetails,
          resetOrderDetails,
       }),
-      [orderDetails, totals]
+      [orderDetails, updateOrderDetails, totals, total, list]
    )
 
    return (

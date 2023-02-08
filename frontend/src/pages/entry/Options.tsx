@@ -21,6 +21,10 @@ type OptionsProps = {
    optionType: OptionType
 }
 
+export function capitalizeFirstLetter(string: string) {
+   return string.charAt(0).toUpperCase() + string.slice(1)
+}
+
 function Options({ optionType }: OptionsProps) {
    const [options, setOptions] = useState<Option[]>([])
    const [isError, setIsError] = useState<boolean>(false)
@@ -55,10 +59,6 @@ function Options({ optionType }: OptionsProps) {
             return ScoopOption
       }
    }, [optionType])
-
-   function capitalizeFirstLetter(string: string) {
-      return string.charAt(0).toUpperCase() + string.slice(1)
-   }
 
    const capitalizedOptionType = capitalizeFirstLetter(optionType)
    const subtotal = totals[optionType].toFixed(2)

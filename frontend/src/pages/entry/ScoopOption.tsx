@@ -31,9 +31,9 @@ function ScoopOption({ name, imagePath }: OptionProps) {
                      direction='horizontal'
                      className='align-items-center justify-content-between'
                   >
-                     <Form.Label>{name}</Form.Label>
+                     <Form.Label className='mb-0 me-2'>{name}</Form.Label>
                      <Form.Control
-                        style={{ width: '100px' }}
+                        style={{ width: '60px' }}
                         type='number'
                         value={value}
                         onChange={handleChange}

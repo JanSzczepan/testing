@@ -1,49 +1,31 @@
-import { useState } from 'react'
-import { Button, Form, OverlayTrigger, Popover } from 'react-bootstrap'
+import { Fragment } from 'react'
+import { ListGroup } from 'react-bootstrap'
+import { optionsArr } from '../../constants'
+import { useOrderDetailsContext } from '../../contexts/OrderDetailsContext'
+import { capitalizeFirstLetter } from '../entry/Options'
+import SummaryForm from './SummaryForm'
 
 function OrderSummary() {
-   const [isChecked, setIsChecked] = useState<boolean>(false)
-
-   const popover = (
-      <Popover id='terms-and-conditions-popover'>
-         <Popover.Body>No ice cream will actually be delivered</Popover.Body>
-      </Popover>
-   )
-
-   const checkboxLabel = (
-      <span>
-         I agree to{' '}
-         <OverlayTrigger
-            trigger={['hover', 'focus']}
-            placement='right'
-            overlay={popover}
-         >
-            <span className='text-primary'>Terms and Conditions</span>
-         </OverlayTrigger>
-      </span>
-   )
+   const { totals, total, list } = useOrderDetailsContext()
 
    return (
-      <Form className='p-4'>
-         <Form.Group
-            className='mb-3'
-            controlId='formCheckbox'
-         >
-            <Form.Check
-               type='checkbox'
-               label={checkboxLabel}
-               checked={isChecked}
-               onChange={(e) => setIsChecked(e.target.checked)}
-            />
-         </Form.Group>
-         <Button
-            variant='primary'
-            type='submit'
-            disabled={!isChecked}
-         >
-            Confirm order
-         </Button>
-      </Form>
+      <section className='p-4'>
+         <h3 className='mb-3'>Order Summary</h3>
+         {optionsArr.map((option) => (
+            <Fragment key={option}>
+               <h5 className='mb-1'>
+                  {capitalizeFirstLetter(option)}: ${totals[option].toFixed(2)}
+               </h5>
+               <ListGroup className='mb-3'>
+                  {list[option].map((item) => (
+                     <ListGroup.Item key={item}>{item}</ListGroup.Item>
+                  ))}
+               </ListGroup>
+            </Fragment>
+         ))}
+         <h5 className='mb-3'>Total: ${total.toFixed(2)}</h5>
+         <SummaryForm />
+      </section>
    )
 }
 
