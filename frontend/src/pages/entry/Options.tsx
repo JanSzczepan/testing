@@ -32,19 +32,26 @@ function Options({ optionType }: OptionsProps) {
    const { totals } = useOrderDetailsContext()
 
    useEffect(() => {
+      const controller = new AbortController()
+
       const getData = async () => {
          try {
             const response = await axios.get<Option[]>(
-               `http://localhost:3030/${optionType}`
+               `http://localhost:3030/${optionType}`,
+               { signal: controller.signal }
             )
 
             setOptions(response.data)
-         } catch (error) {
-            setIsError(true)
+         } catch (error: any) {
+            if (error.name !== 'CanceledError') setIsError(true)
          }
       }
 
       getData()
+
+      return () => {
+         controller.abort()
+      }
    }, [optionType])
 
    const OptionItem = useMemo(() => {

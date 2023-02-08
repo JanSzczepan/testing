@@ -61,11 +61,13 @@ test('update toppings subtotal when topping changes', async () => {
 
 describe('grand total', () => {
    test('grand total start at $0.00', () => {
-      render(<OrderEntry />)
+      const { unmount } = render(<OrderEntry />)
 
       const grandTotal = screen.getByText('Grand total: $', { exact: false })
 
       expect(grandTotal).toHaveTextContent('0.00')
+
+      unmount()
    })
    test('grand total updates properly if scoops are added first', async () => {
       const user = userEvent.setup()
