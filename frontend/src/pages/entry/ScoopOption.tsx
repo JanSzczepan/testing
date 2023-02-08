@@ -1,4 +1,6 @@
-import { Card, Col } from 'react-bootstrap'
+import { ChangeEvent, useState } from 'react'
+import { Card, Col, Form, Stack } from 'react-bootstrap'
+import { useOrderDetailsContext } from '../../contexts/OrderDetailsContext'
 
 export type OptionProps = {
    name: string
@@ -6,6 +8,15 @@ export type OptionProps = {
 }
 
 function ScoopOption({ name, imagePath }: OptionProps) {
+   const { updateOrderDetails, orderDetails } = useOrderDetailsContext()
+   const [value, setValue] = useState<number>(orderDetails.scoops[name] || 0)
+
+   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+      setValue(Number(e.target.value))
+
+      updateOrderDetails(name, Number(e.target.value), 'scoops')
+   }
+
    return (
       <Col>
          <Card className='h-100'>
@@ -15,7 +26,22 @@ function ScoopOption({ name, imagePath }: OptionProps) {
                alt={`${name} scoop`}
             />
             <Card.Body>
-               <Card.Text>This is {name} scoop</Card.Text>
+               <Form.Group controlId={name}>
+                  <Stack
+                     direction='horizontal'
+                     className='align-items-center justify-content-between'
+                  >
+                     <Form.Label>{name}</Form.Label>
+                     <Form.Control
+                        style={{ width: '100px' }}
+                        type='number'
+                        value={value}
+                        onChange={handleChange}
+                        min={0}
+                        max={10}
+                     />
+                  </Stack>
+               </Form.Group>
             </Card.Body>
          </Card>
       </Col>

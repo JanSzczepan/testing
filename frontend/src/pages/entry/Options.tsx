@@ -1,6 +1,8 @@
 import axios from 'axios'
 import { useEffect, useMemo, useState } from 'react'
 import { Row, Stack } from 'react-bootstrap'
+import { pricePerItem } from '../../constants'
+import { useOrderDetailsContext } from '../../contexts/OrderDetailsContext'
 import AlertBanner from '../common/AlertBanner'
 import ScoopOption from './ScoopOption'
 import ToppingOption from './ToppingOption'
@@ -22,6 +24,8 @@ type OptionsProps = {
 function Options({ optionType }: OptionsProps) {
    const [options, setOptions] = useState<Option[]>([])
    const [isError, setIsError] = useState<boolean>(false)
+
+   const { totals } = useOrderDetailsContext()
 
    useEffect(() => {
       const getData = async () => {
@@ -56,9 +60,16 @@ function Options({ optionType }: OptionsProps) {
       return string.charAt(0).toUpperCase() + string.slice(1)
    }
 
+   const capitalizedOptionType = capitalizeFirstLetter(optionType)
+   const subtotal = totals[optionType].toFixed(2)
+
    return (
-      <Stack className='p-4'>
-         <h3>{capitalizeFirstLetter(optionType)}</h3>
+      <Stack className='mb-4'>
+         <h3>{capitalizedOptionType}</h3>
+         <p>${pricePerItem[optionType]} each</p>
+         <p>
+            {capitalizedOptionType} total: ${subtotal}
+         </p>
          {isError ? (
             <AlertBanner />
          ) : (

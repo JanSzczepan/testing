@@ -1,7 +1,18 @@
-import { Card, Col } from 'react-bootstrap'
+import { ChangeEvent } from 'react'
+import { Card, Col, Form, Stack } from 'react-bootstrap'
+import { useOrderDetailsContext } from '../../contexts/OrderDetailsContext'
 import { OptionProps } from './ScoopOption'
 
 function ToppingOption({ name, imagePath }: OptionProps) {
+   const { updateOrderDetails, orderDetails } = useOrderDetailsContext()
+
+   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+      const count = e.target.checked ? 1 : 0
+      updateOrderDetails(name, count, 'toppings')
+   }
+
+   const checked = !!orderDetails.toppings[name]
+
    return (
       <Col>
          <Card className='h-100'>
@@ -11,7 +22,19 @@ function ToppingOption({ name, imagePath }: OptionProps) {
                alt={`${name} topping`}
             />
             <Card.Body>
-               <Card.Text>This is {name} topping</Card.Text>
+               <Stack
+                  className='align-items-center justify-content-between'
+                  direction='horizontal'
+               >
+                  <Form.Group controlId={name}>
+                     <Form.Check
+                        type='checkbox'
+                        label={name}
+                        checked={checked}
+                        onChange={handleChange}
+                     />
+                  </Form.Group>
+               </Stack>
             </Card.Body>
          </Card>
       </Col>
