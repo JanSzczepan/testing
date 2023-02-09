@@ -1,9 +1,9 @@
 import { render } from '@testing-library/react'
 import { ReactElement } from 'react'
-import { OrderDetailsContextProvider } from '../contexts/OrderDetailsContext'
+import AllTheProviders from '../contexts/AllTheProviders'
 
 const renderWithContext = (ui: ReactElement, options?: any) =>
-   render(ui, { wrapper: OrderDetailsContextProvider, ...options })
+   render(ui, { wrapper: AllTheProviders, ...options })
 
 export * from '@testing-library/react'
 

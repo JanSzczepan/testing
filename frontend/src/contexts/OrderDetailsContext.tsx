@@ -53,17 +53,19 @@ export const useOrderDetailsContext = () => {
    const context = useContext(OrderDetailsContext)
 
    if (!context) {
-      throw new Error('OrderDetailsContext can only be used within provider')
+      throw new Error(
+         'OrderDetailsContext can only be used within OrderDetailsContextProvider'
+      )
    }
 
    return context
 }
 
-type ProvierProps = {
+type ProviderProps = {
    children: ReactNode
 }
 
-export function OrderDetailsContextProvider({ children }: ProvierProps) {
+export function OrderDetailsContextProvider({ children }: ProviderProps) {
    const [orderDetails, setOrderDetails] = useState<OrderDetailsType>({
       scoops: {},
       toppings: {},
