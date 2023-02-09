@@ -1,8 +1,15 @@
-import { useState } from 'react'
+import { SyntheticEvent, useState } from 'react'
 import { Button, Form, OverlayTrigger, Popover } from 'react-bootstrap'
+import { useOrderPhaseContext } from '../../contexts/OrderPhaseContext'
 
 function SummaryForm() {
    const [isChecked, setIsChecked] = useState<boolean>(false)
+   const { changeOrderPhase } = useOrderPhaseContext()
+
+   const handleSubmitOrder = (e: SyntheticEvent) => {
+      e.preventDefault()
+      changeOrderPhase('complete')
+   }
 
    const popover = (
       <Popover id='terms-and-conditions-popover'>
@@ -24,7 +31,7 @@ function SummaryForm() {
    )
 
    return (
-      <Form>
+      <Form onSubmit={handleSubmitOrder}>
          <Form.Group
             className='mb-3'
             controlId='formCheckbox'

@@ -1,6 +1,8 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { Button, Spinner } from 'react-bootstrap'
+import { useOrderDetailsContext } from '../../contexts/OrderDetailsContext'
+import { useOrderPhaseContext } from '../../contexts/OrderPhaseContext'
 
 type OrderData = {
    orderNumber: number
@@ -9,6 +11,8 @@ type OrderData = {
 function OrderConfirmation() {
    const [orderNumber, setOrderNumber] = useState<number | null>(null)
    const [isLoading, setIsLoading] = useState<boolean>(true)
+   const { resetOrderDetails } = useOrderDetailsContext()
+   const { changeOrderPhase } = useOrderPhaseContext()
 
    useEffect(() => {
       const controller = new AbortController()
@@ -34,6 +38,11 @@ function OrderConfirmation() {
       }
    }, [])
 
+   const handleNewOrder = () => {
+      resetOrderDetails()
+      changeOrderPhase('inProgress')
+   }
+
    return (
       <section className='p-4'>
          <h3>Thank you!</h3>
@@ -49,7 +58,12 @@ function OrderConfirmation() {
             <>
                <h5>Your order number is {orderNumber}</h5>
                <p>As per our terms and conditions nothing will happen now</p>
-               <Button variant='primary'>Create new order</Button>
+               <Button
+                  variant='primary'
+                  onClick={handleNewOrder}
+               >
+                  Create new order
+               </Button>
             </>
          )}
       </section>
