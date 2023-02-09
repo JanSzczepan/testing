@@ -4,7 +4,7 @@ import { render, screen } from '../test-utils/testing-library-utils'
 
 test('order phases for happy path', async () => {
    const user = userEvent.setup()
-   render(<App />)
+   const { unmount } = render(<App />)
 
    // add scoops
    const vanillaInput = await screen.findByRole('spinbutton', {
@@ -95,4 +95,6 @@ test('order phases for happy path', async () => {
    expect(scoopsTotal).toHaveTextContent('0.00')
    expect(toppingsTotal).toHaveTextContent('0.00')
    expect(allTotal).toHaveTextContent('0.00')
+
+   unmount()
 })
